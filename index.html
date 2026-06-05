@@ -1,12 +1,191 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>تست جامع سلامت و مزاج</title>
+
+<style>
+
+body{
+font-family:tahoma;
+background:#f5f5f5;
+padding:20px;
+}
+
+.container{
+background:white;
+padding:20px;
+border-radius:15px;
+max-width:700px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+color:#1d5c3f;
+}
+
+.question{
+margin-top:20px;
+padding:15px;
+border:1px solid #ddd;
+border-radius:10px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:20px;
+font-size:18px;
+background:#1d5c3f;
+color:white;
+border:none;
+border-radius:10px;
+}
+
+.result{
+display:none;
+margin-top:30px;
+padding:15px;
+background:#eef8f0;
+border-radius:10px;
+}
+
+</style>
+
 </head>
+
 <body>
 
-<h1>تست جامع سلامت، مزاج و متابولیسم بدن</h1>
+<div class="container">
+
+<h1>
+تست جامع سلامت، مزاج و متابولیسم بدن
+</h1>
+
+<p>
+به سوالات پاسخ دهید و نتیجه را مشاهده کنید.
+</p>
+
+<div class="question">
+
+<p>
+1- دمای دست و پای شما چگونه است؟
+</p>
+
+<label>
+<input type="radio" name="q1" value="1">
+اغلب سرد است
+</label>
+
+<br><br>
+
+<label>
+<input type="radio" name="q1" value="2">
+متعادل است
+</label>
+
+<br><br>
+
+<label>
+<input type="radio" name="q1" value="3">
+اغلب گرم است
+</label>
+
+</div>
+
+<div class="question">
+
+<p>
+2- اشتهای شما چگونه است؟
+</p>
+
+<label>
+<input type="radio" name="q2" value="1">
+کم اشتها
+</label>
+
+<br><br>
+
+<label>
+<input type="radio" name="q2" value="2">
+متعادل
+</label>
+
+<br><br>
+
+<label>
+<input type="radio" name="q2" value="3">
+زیاد
+</label>
+
+</div>
+
+<button onclick="showResult()">
+
+مشاهده نتیجه
+
+</button>
+
+<div class="result" id="result">
+
+<h2>گزارش سلامت شما</h2>
+
+<p>
+بلغمی: 45%
+</p>
+
+<p>
+سوداوی: 15%
+</p>
+
+<p>
+دموی: 20%
+</p>
+
+<p>
+صفراوی: 20%
+</p>
+
+<p>
+گوارش: 72 از 100
+</p>
+
+<p>
+خواب: 60 از 100
+</p>
+
+<p>
+متابولیسم: 55 از 100
+</p>
+
+<p>
+استرس: 80 از 100
+</p>
+
+<a href="https://rubika.ir/andam_bartar_1">
+
+ارتباط با مشاور
+
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+function showResult(){
+
+document.getElementById("result").style.display="block";
+
+}
+
+</script>
 
 </body>
+
 </html>
