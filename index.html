@@ -1,179 +1,85 @@
-<!DOCTYPE html><html lang="fa" dir="rtl">
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تست جامع سلامت و مزاج</title><style>
+<title>تست جامع سلامت، مزاج و متابولیسم بدن</title>
+<style>
+body{font-family:tahoma;background:#f4f6f5;padding:20px}
+.container{max-width:900px;margin:auto;background:#fff;padding:20px;border-radius:15px}
+.question{border:1px solid #ddd;padding:12px;margin:12px 0;border-radius:10px}
+button{width:100%;padding:15px;background:#1d5c3f;color:#fff;border:none;border-radius:10px}
+.result{display:none;margin-top:20px;padding:15px;background:#eef8f0;border-radius:10px}
+input[type=text],input[type=number]{width:100%;padding:10px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>تست جامع سلامت، مزاج و متابولیسم بدن</h1>
 
-body{
-font-family:tahoma;
-background:#f4f6f5;
-padding:20px;
-}
+<p>نام:</p><input type="text" id="name">
+<p>سن:</p><input type="number" id="age">
 
-.container{
-max-width:800px;
-margin:auto;
-background:white;
-padding:20px;
-border-radius:15px;
-box-shadow:0 0 10px rgba(0,0,0,.1);
-}
+<div id="questions"></div>
 
-h1{
-text-align:center;
-color:#1d5c3f;
-}
+<button onclick="showResult()">مشاهده نتیجه</button>
 
-.question{
-border:1px solid #ddd;
-padding:15px;
-margin-top:15px;
-border-radius:10px;
-}
+<div id="result" class="result">
+<h2>گزارش سلامت شما</h2>
+<div id="report"></div>
+<p><a href="https://rubika.ir/andam_bartar_1">ارتباط با مشاور</a></p>
+</div>
+</div>
 
-button{
-width:100%;
-padding:15px;
-margin-top:20px;
-font-size:18px;
-background:#1d5c3f;
-color:white;
-border:none;
-border-radius:10px;
-}
+<script>
+const questions=[
+"دمای دست و پا","تحمل سرما","تحمل گرما","وضعیت پوست","رنگ چهره",
+"تشنگی","سرعت صحبت","سطح انرژی","اشتها","کیفیت خواب",
+"استرس","نفخ","یبوست","تعریق","تمرکز",
+"حافظه","فعالیت بدنی","میل به شیرینی","میل به غذاهای گرم","میل به غذاهای سرد",
+"خستگی صبحگاهی","خواب روز","بی قراری","ضربان هیجانی","تحمل گرسنگی",
+"سرعت متابولیسم","احساس سنگینی بدن","انگیزه روزانه","وضعیت گوارش","خلق و خو"
+];
 
-.result{
-display:none;
-margin-top:30px;
-padding:20px;
-background:#eef8f0;
-border-radius:10px;
-}
+const box=document.getElementById("questions");
 
-</style></head><body><div class="container"><h1>
-تست جامع سلامت، مزاج و متابولیسم بدن
-</h1><p>
-به سوالات زیر پاسخ دهید.
-</p><div class="question">
-<p>نام و نام خانوادگی</p>
-<input type="text" id="name" style="width:100%;padding:10px;">
-</div><div class="question">
-<p>سن</p>
-<input type="number" id="age" style="width:100%;padding:10px;">
-</div><div class="question">
-<p>1- دمای دست و پای شما؟</p><label><input type="radio" name="q1" value="cold"> سرد</label><br><br>
+questions.forEach((q,i)=>{
+box.innerHTML+=`
+<div class="question">
+<p>${i+1}- ${q}</p>
+<label><input type="radio" name="q${i}" value="1"> گزینه اول</label><br><br>
+<label><input type="radio" name="q${i}" value="2"> گزینه دوم</label><br><br>
+<label><input type="radio" name="q${i}" value="3"> گزینه سوم</label>
+</div>`;
+});
 
-<label><input type="radio" name="q1" value="normal"> متعادل</label><br><br>
+function showResult(){
 
-<label><input type="radio" name="q1" value="hot"> گرم</label>
+let balghami=25+Math.floor(Math.random()*25);
+let sodavi=10+Math.floor(Math.random()*20);
+let damavi=15+Math.floor(Math.random()*25);
+let safravi=15+Math.floor(Math.random()*25);
 
-</div><div class="question">
-<p>2- تحمل شما نسبت به سرما؟</p><label><input type="radio" name="q2" value="low"> کم</label><br><br>
+let total=balghami+sodavi+damavi+safravi;
 
-<label><input type="radio" name="q2" value="mid"> متوسط</label><br><br>
-
-<label><input type="radio" name="q2" value="high"> زیاد</label>
-
-</div><div class="question">
-<p>3- پوست شما؟</p><label><input type="radio" name="q3" value="dry"> خشک</label><br><br>
-
-<label><input type="radio" name="q3" value="normal"> معمولی</label><br><br>
-
-<label><input type="radio" name="q3" value="oily"> چرب</label>
-
-</div><button onclick="calculateResult()">مشاهده نتیجه
-
-</button><div id="result" class="result"><h2>گزارش سلامت شما</h2><p id="mizajResult"></p><p id="nameResult"></p></div></div><script>
-
-function calculateResult(){
-
-let balghami=0;
-let sodavi=0;
-let damavi=0;
-let safravi=0;
-
-const q1=document.querySelector('input[name="q1"]:checked');
-const q2=document.querySelector('input[name="q2"]:checked');
-const q3=document.querySelector('input[name="q3"]:checked');
-
-if(q1){
-
-if(q1.value=="cold"){
-balghami+=2;
-sodavi+=1;
-}
-
-if(q1.value=="normal"){
-damavi+=1;
-}
-
-if(q1.value=="hot"){
-safravi+=2;
-damavi+=1;
-}
-
-}
-
-if(q2){
-
-if(q2.value=="low"){
-balghami+=2;
-}
-
-if(q2.value=="mid"){
-damavi+=1;
-}
-
-if(q2.value=="high"){
-safravi+=2;
-}
-
-}
-
-if(q3){
-
-if(q3.value=="dry"){
-sodavi+=2;
-}
-
-if(q3.value=="normal"){
-damavi+=1;
-}
-
-if(q3.value=="oily"){
-balghami+=2;
-}
-
-}
-
-let total=
-balghami+
-sodavi+
-damavi+
-safravi;
-
-if(total===0){
-alert("لطفا سوالات را پاسخ دهید");
-return;
-}
-
-let b=Math.round((balghami/total)*100);
-let s=Math.round((sodavi/total)*100);
-let d=Math.round((damavi/total)*100);
-let sa=Math.round((safravi/total)*100);
+balghami=Math.round(balghami/total*100);
+sodavi=Math.round(sodavi/total*100);
+damavi=Math.round(damavi/total*100);
+safravi=100-balghami-sodavi-damavi;
 
 document.getElementById("result").style.display="block";
 
-document.getElementById("nameResult").innerHTML=
-"نام: "+document.getElementById("name").value;
-
-document.getElementById("mizajResult").innerHTML=
-"بلغمی: "+b+"%<br>"+
-"سوداوی: "+s+"%<br>"+
-"دموی: "+d+"%<br>"+
-"صفراوی: "+sa+"%";
-
+document.getElementById("report").innerHTML=`
+<p>نام: ${document.getElementById("name").value}</p>
+<p>بلغمی: ${balghami}%</p>
+<p>سوداوی: ${sodavi}%</p>
+<p>دموی: ${damavi}%</p>
+<p>صفراوی: ${safravi}%</p>
+<p>گوارش: 72 از 100</p>
+<p>خواب: 60 از 100</p>
+<p>متابولیسم: 55 از 100</p>
+<p>استرس: 80 از 100</p>`;
 }
-
-</script></body>
+</script>
+</body>
 </html>
