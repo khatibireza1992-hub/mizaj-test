@@ -1,26 +1,22 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-
+<!DOCTYPE html><html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>تست جامع سلامت و مزاج</title>
-
-<style>
+<title>تست جامع سلامت و مزاج</title><style>
 
 body{
 font-family:tahoma;
-background:#f5f5f5;
+background:#f4f6f5;
 padding:20px;
 }
 
 .container{
+max-width:800px;
+margin:auto;
 background:white;
 padding:20px;
 border-radius:15px;
-max-width:700px;
-margin:auto;
+box-shadow:0 0 10px rgba(0,0,0,.1);
 }
 
 h1{
@@ -29,9 +25,9 @@ color:#1d5c3f;
 }
 
 .question{
-margin-top:20px;
-padding:15px;
 border:1px solid #ddd;
+padding:15px;
+margin-top:15px;
 border-radius:10px;
 }
 
@@ -49,143 +45,135 @@ border-radius:10px;
 .result{
 display:none;
 margin-top:30px;
-padding:15px;
+padding:20px;
 background:#eef8f0;
 border-radius:10px;
 }
 
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>
+</style></head><body><div class="container"><h1>
 تست جامع سلامت، مزاج و متابولیسم بدن
-</h1>
+</h1><p>
+به سوالات زیر پاسخ دهید.
+</p><div class="question">
+<p>نام و نام خانوادگی</p>
+<input type="text" id="name" style="width:100%;padding:10px;">
+</div><div class="question">
+<p>سن</p>
+<input type="number" id="age" style="width:100%;padding:10px;">
+</div><div class="question">
+<p>1- دمای دست و پای شما؟</p><label><input type="radio" name="q1" value="cold"> سرد</label><br><br>
 
-<p>
-به سوالات پاسخ دهید و نتیجه را مشاهده کنید.
-</p>
+<label><input type="radio" name="q1" value="normal"> متعادل</label><br><br>
 
-<div class="question">
+<label><input type="radio" name="q1" value="hot"> گرم</label>
 
-<p>
-1- دمای دست و پای شما چگونه است؟
-</p>
+</div><div class="question">
+<p>2- تحمل شما نسبت به سرما؟</p><label><input type="radio" name="q2" value="low"> کم</label><br><br>
 
-<label>
-<input type="radio" name="q1" value="1">
-اغلب سرد است
-</label>
+<label><input type="radio" name="q2" value="mid"> متوسط</label><br><br>
 
-<br><br>
+<label><input type="radio" name="q2" value="high"> زیاد</label>
 
-<label>
-<input type="radio" name="q1" value="2">
-متعادل است
-</label>
+</div><div class="question">
+<p>3- پوست شما؟</p><label><input type="radio" name="q3" value="dry"> خشک</label><br><br>
 
-<br><br>
+<label><input type="radio" name="q3" value="normal"> معمولی</label><br><br>
 
-<label>
-<input type="radio" name="q1" value="3">
-اغلب گرم است
-</label>
+<label><input type="radio" name="q3" value="oily"> چرب</label>
 
-</div>
+</div><button onclick="calculateResult()">مشاهده نتیجه
 
-<div class="question">
+</button><div id="result" class="result"><h2>گزارش سلامت شما</h2><p id="mizajResult"></p><p id="nameResult"></p></div></div><script>
 
-<p>
-2- اشتهای شما چگونه است؟
-</p>
+function calculateResult(){
 
-<label>
-<input type="radio" name="q2" value="1">
-کم اشتها
-</label>
+let balghami=0;
+let sodavi=0;
+let damavi=0;
+let safravi=0;
 
-<br><br>
+const q1=document.querySelector('input[name="q1"]:checked');
+const q2=document.querySelector('input[name="q2"]:checked');
+const q3=document.querySelector('input[name="q3"]:checked');
 
-<label>
-<input type="radio" name="q2" value="2">
-متعادل
-</label>
+if(q1){
 
-<br><br>
+if(q1.value=="cold"){
+balghami+=2;
+sodavi+=1;
+}
 
-<label>
-<input type="radio" name="q2" value="3">
-زیاد
-</label>
+if(q1.value=="normal"){
+damavi+=1;
+}
 
-</div>
-
-<button onclick="showResult()">
-
-مشاهده نتیجه
-
-</button>
-
-<div class="result" id="result">
-
-<h2>گزارش سلامت شما</h2>
-
-<p>
-بلغمی: 45%
-</p>
-
-<p>
-سوداوی: 15%
-</p>
-
-<p>
-دموی: 20%
-</p>
-
-<p>
-صفراوی: 20%
-</p>
-
-<p>
-گوارش: 72 از 100
-</p>
-
-<p>
-خواب: 60 از 100
-</p>
-
-<p>
-متابولیسم: 55 از 100
-</p>
-
-<p>
-استرس: 80 از 100
-</p>
-
-<a href="https://rubika.ir/andam_bartar_1">
-
-ارتباط با مشاور
-
-</a>
-
-</div>
-
-</div>
-
-<script>
-
-function showResult(){
-
-document.getElementById("result").style.display="block";
+if(q1.value=="hot"){
+safravi+=2;
+damavi+=1;
+}
 
 }
 
-</script>
+if(q2){
 
-</body>
+if(q2.value=="low"){
+balghami+=2;
+}
 
+if(q2.value=="mid"){
+damavi+=1;
+}
+
+if(q2.value=="high"){
+safravi+=2;
+}
+
+}
+
+if(q3){
+
+if(q3.value=="dry"){
+sodavi+=2;
+}
+
+if(q3.value=="normal"){
+damavi+=1;
+}
+
+if(q3.value=="oily"){
+balghami+=2;
+}
+
+}
+
+let total=
+balghami+
+sodavi+
+damavi+
+safravi;
+
+if(total===0){
+alert("لطفا سوالات را پاسخ دهید");
+return;
+}
+
+let b=Math.round((balghami/total)*100);
+let s=Math.round((sodavi/total)*100);
+let d=Math.round((damavi/total)*100);
+let sa=Math.round((safravi/total)*100);
+
+document.getElementById("result").style.display="block";
+
+document.getElementById("nameResult").innerHTML=
+"نام: "+document.getElementById("name").value;
+
+document.getElementById("mizajResult").innerHTML=
+"بلغمی: "+b+"%<br>"+
+"سوداوی: "+s+"%<br>"+
+"دموی: "+d+"%<br>"+
+"صفراوی: "+sa+"%";
+
+}
+
+</script></body>
 </html>
