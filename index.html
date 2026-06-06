@@ -59,7 +59,39 @@ let balghami = 0;
 let sodavi = 0;
 let damavi = 0;
 let safravi = 0;
+for(let i=0;i<30;i++){
 
+let answer=document.querySelector(
+'input[name="q'+i+'"]:checked'
+);
+
+if(!answer){
+continue;
+}
+
+let value=parseInt(answer.value);
+
+if(value===1){
+
+balghami+=2;
+sodavi+=1;
+
+}
+
+if(value===2){
+
+damavi+=2;
+
+}
+
+if(value===3){
+
+safravi+=2;
+damavi+=1;
+
+}
+
+}
 let total=balghami+sodavi+damavi+safravi;
 
 balghami=Math.round(balghami/total*100);
