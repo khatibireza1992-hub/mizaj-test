@@ -107,11 +107,6 @@ sodavi=Math.round(sodavi/total*100);
 damavi=Math.round(damavi/total*100);
 safravi=100-balghami-sodavi-damavi;
 
-document.getElementById("result").style.display="block";
-let digestive = Math.min(100, Math.round((damavi*0.4)+(balghami*0.6)));
-let sleep = Math.min(100, Math.round((balghami*0.7)+(sodavi*0.3)));
-let metabolism = Math.min(100, Math.round((safravi*0.7)+(damavi*0.3)));
-let stress = Math.min(100, Math.round((safravi*0.6)+(sodavi*0.4)));
 document.getElementById("report").innerHTML=`
 <p>نام: ${document.getElementById("name").value}</p>
 <p>بلغمی: ${balghami}%</p>
@@ -122,6 +117,7 @@ document.getElementById("report").innerHTML=`
 <p>خواب: ${sleep} از 100</p>
 <p>متابولیسم: ${metabolism} از 100</p>
 <p>استرس: ${stress} از 100</p>
+`;
 }
 </script>
 </body>
