@@ -129,6 +129,28 @@ const box=document.getElementById("questions");
 
 questions.forEach((q,i)=>{
 
+let option1="کم / ضعیف / سرد";
+let option2="متوسط / متعادل";
+let option3="زیاد / قوی / گرم";
+
+if(i===0){
+option1="اغلب سرد است";
+option2="متعادل است";
+option3="اغلب گرم است";
+}
+
+if(i===1){
+option1="خیلی کم";
+option2="متوسط";
+option3="زیاد";
+}
+
+if(i===2){
+option1="زیاد";
+option2="متوسط";
+option3="کم";
+}
+
 box.innerHTML+=`
 
 <div class="question">
@@ -137,21 +159,21 @@ box.innerHTML+=`
 
 <label>
 <input type="radio" name="q${i}" value="1">
-کم / ضعیف / سرد
+${option1}
 </label>
 
 <br><br>
 
 <label>
 <input type="radio" name="q${i}" value="2">
-متوسط / متعادل
+${option2}
 </label>
 
 <br><br>
 
 <label>
 <input type="radio" name="q${i}" value="3">
-زیاد / قوی / گرم
+${option3}
 </label>
 
 </div>
