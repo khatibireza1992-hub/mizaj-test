@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تست مزاج - اندام برتر</title>
+    <title>تست مزاج و لاغری - اندام برتر</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {font-family: Tahoma; background:#f0f7f0; margin:0; padding:10px;}
@@ -13,13 +13,14 @@
         .question {background:#f8fff8; padding:15px; margin:12px 0; border-radius:10px;}
         label {display:block; padding:10px; margin:5px 0; background:white; border-radius:6px;}
         button {width:100%; padding:18px; background:#1d5c3f; color:white; border:none; border-radius:10px; font-size:18px; margin:20px 0;}
-        .result {display:none; margin-top:20px;}
+        .result {display:none; margin-top:20px; text-align:center;}
+        a {display:block; margin:20px auto; padding:15px; background:#1d5c3f; color:white; text-decoration:none; border-radius:10px;}
     </style>
 </head>
 <body>
 <div class="box">
     <h1>🧬 تست مزاج و لاغری</h1>
-
+    
     <p><strong>نام:</strong></p>
     <input type="text" id="name" placeholder="نام و نام خانوادگی">
 
@@ -31,13 +32,11 @@
     <button onclick="showResult()">مشاهده نتیجه تست</button>
 
     <div id="result" class="result">
-        <h2 style="text-align:center;">گزارش مزاج شما</h2>
+        <h2>گزارش مزاج شما</h2>
         <div id="report"></div>
-        <canvas id="mizajChart" style="margin:20px auto;"></canvas>
+        <canvas id="mizajChart" width="300" height="300"></canvas>
         
-        <a href="https://rubika.ir/andam_barat_1" target="_blank" style="display:block; text-align:center; padding:15px; background:#1d5c3f; color:white; text-decoration:none; border-radius:10px;">
-            مشاوره با @andam_barat_1
-        </a>
+        <a href="https://rubika.ir/andam_barat_1" target="_blank">📲 مشاوره با @andam_barat_1</a>
     </div>
 </div>
 
@@ -70,25 +69,47 @@ function showResult() {
     const age = document.getElementById("age").value;
 
     if (!name || !age) {
-        alert("نام و سن را وارد کنید");
+        alert("لطفاً نام و سن را وارد کنید");
         return;
     }
 
-    // محاسبه ساده
     let score = 0;
-    for(let i = 0; i < questions.length; i++) {
-        const ans = document.querySelector(`input[name="q${i}"]:checked`);
-        if (ans) score += parseInt(ans.value);
-    }
+    let answered = 0;
 
-    const percent = Math.round((score / (questions.length * 2)) * 100);
+    questions.forEach((_, i) => {
+        const ans = document.querySelector(`input[name="q${i}"]:checked`);
+        if (ans) {
+            score += parseInt(ans.value);
+            answered++;
+        }
+    });
+
+    const percent = answered > 0 ? Math.round((score / (answered * 2)) * 100) : 0;
+
+    let mizaj = percent > 65 ? "گرم و خشک (صفراوی)" : 
+               percent > 45 ? "گرم و تر (دموی)" : 
+               percent > 25 ? "سرد و تر (بلغمی)" : "سرد و خشک (سوداوی)";
 
     document.getElementById("report").innerHTML = `
         <p><strong>نام:</strong> ${name}</p>
         <p><strong>سن:</strong> ${age} سال</p>
-        <p><strong>مزاج غالب:</strong> ${percent > 60 ? "گرم" : percent > 40 ? "متعادل" : "سرد"}</p>
-        <p>امتیاز: ${percent}%</p>
+        <p><strong>مزاج غالب:</strong> ${mizaj}</p>
+        <p><strong>امتیاز:</strong> ${percent}%</p>
     `;
+
+    // نمایش نمودار
+    const ctx = document.getElementById('mizajChart');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['سرد', 'متعادل', 'گرم'],
+            datasets: [{
+                data: [100 - percent, 20, percent],
+                backgroundColor: ['#4fc3f7', '#81c784', '#ff9800']
+            }]
+        },
+        options: { responsive: true }
+    });
 
     document.getElementById("result").style.display = "block";
 }
