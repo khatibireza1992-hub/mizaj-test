@@ -178,10 +178,39 @@ function showResult() {
         if (!selected) return;
         const val = parseInt(selected.value);
 
-        if (val === 0) { balghami += 4; sodavi += 1; }
-        else if (val === 1) { damavi += 2; }
-        else if (val === 2) { safravi += 4; damavi += 1; }
-    });
+        if(i===0){
+
+    if(value===1){
+        balghami+=4;
+        sodavi+=2;
+    }
+
+    if(value===2){
+        damavi+=3;
+    }
+
+    if(value===3){
+        safravi+=4;
+        damavi+=2;
+    }
+
+}else{
+
+    if(value===1){
+        balghami+=2;
+        sodavi+=1;
+    }
+
+    if(value===2){
+        damavi+=2;
+    }
+
+    if(value===3){
+        safravi+=2;
+        damavi+=1;
+    }
+
+        }
 
     const total = balghami + damavi + safravi + sodavi || 1;
     const percentages = {
