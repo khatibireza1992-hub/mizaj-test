@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست جامع مزاج و لاغری - اندام برتر</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            margin: 0;
+            padding: 15px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        h1 {
+            text-align: center;
+            color: #1d5c3f;
+            padding: 25px;
+            margin: 0;
+            background: #f1f8f3;
+        }
+        .section { padding: 20px; }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border: 2px solid #81c784;
+            border-radius: 10px;
+            font-size: 17px;
+        }
+        .question {
+            background: #f8fff8;
+            padding: 18px;
+            margin: 12px 0;
+            border-radius: 15px;
+            border: 1px solid #81c784;
+        }
+        label {
+            display: block;
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        label:hover { background: #e8f5e9; }
+        button {
+            width: 90%;
+            margin: 25px auto;
+            display: block;
+            padding: 18px;
+            background: #1d5c3f;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 19px;
+            font-weight: bold;
+        }
+        .result { display: none; padding: 25px; }
+        .report-item { font-size: 18px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .dominant { font-size: 24px; font-weight: bold; color: #2e7d32; text-align: center; margin: 15px 0; }
+        a {
+            display: block;
+            margin: 25px auto;
+            padding: 16px;
+            background: #1d5c3f;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 18px;
+            text-align: center;
+        }
+        canvas {
+            max-width: 100% !important;
+            height: 340px !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧬 تست جامع مزاج و لاغری</h1>
+
+    <div class="section">
+        <p><strong>نام و نام خانوادگی:</strong></p>
+        <input type="text" id="name" placeholder="نام خود را وارد کنید">
+
+        <p><strong>سن:</strong></p>
+        <input type="number" id="age" placeholder="سن خود را وارد کنید">
+    </div>
+
+    <div id="questions" class="section"></div>
+
+    <button onclick="showResult()">مشاهده نتیجه تست</button>
+
+    <div id="result" class="result">
+        <h2 style="text-align:center; color:#1d5c3f;">گزارش کامل مزاج و لاغری شما</h2>
+        <div id="report"></div>
+        <canvas id="mizajChart"></canvas>
+        
+        <a href="https://rubika.ir/andam_barat_1" target="_blank">
+            📲 مشاوره شخصی با @andam_barat_1
+        </a>
+    </div>
+</div>
+
+<script>
+// ۳۰ سوال حرفه‌ای
+const questions = [
+    {q: "دمای دست و پای شما معمولاً چگونه است؟", opt: ["سرد", "متعادل", "گرم"]},
+    {q: "تحمل شما در برابر سرما چقدر است؟", opt: ["بالا (دوست دارم)", "متوسط", "پایین (سردم می‌شود)"]},
+    {q: "تحمل شما در برابر گرما چقدر است؟", opt: ["پایین (گرمم می‌شود)", "متوسط", "بالا (دوست دارم)"]},
+    {q: "پوست صورت و بدن شما:", opt: ["خشک و پوسته‌پوسته", "متعادل", "چرب و مرطوب"]},
+    {q: "رنگ چهره شما بیشتر:", opt: ["سفید و کم‌رنگ", "متوسط", "سرخ و برافروخته"]},
+    {q: "موهای شما:", opt: ["نازک و شکننده", "متوسط", "ضخیم و پرپشت"]},
+    {q: "خواب شما:", opt: ["زیاد و سنگین", "متوسط و منظم", "کم و سبک"]},
+    {q: "اشتهای شما:", opt: ["کم", "متوسط", "زیاد و شدید"]},
+    {q: "سرعت هضم غذا:", opt: ["کند با نفخ", "متوسط", "سریع (زود گرسنه می‌شوم)"]},
+    {q: "میل به غذاهای:", opt: ["گرم و تند", "متعادل", "سرد و تر"]},
+    {q: "سطح انرژی روزانه:", opt: ["کم و خسته", "متوسط", "بالا و پرانرژی"]},
+    {q: "خلق و خوی غالب:", opt: ["آرام و ساکت", "متعادل", "فعال و اجتماعی"]},
+    {q: "تعریق بدن:", opt: ["کم", "متوسط", "زیاد"]},
+    {q: "مدفوع معمول:", opt: ["سفت و خشک", "متوسط", "شل"]},
+    {q: "تمرکز و حافظه:", opt: ["عمیق اما کند", "متوسط", "سریع و متغیر"]},
+    {q: "واکنش به استرس:", opt: ["آرام", "متوسط", "عصبی"]},
+    {q: "اندام کلی بدن:", opt: ["چاق و پفکی", "متوسط", "لاغر و استخوانی"]},
+    {q: "دمای بدن در استراحت:", opt: ["کم", "متعادل", "بالا"]},
+    {q: "علاقه به فصل:", opt: ["زمستان", "متعادل", "تابستان"]},
+    {q: "احساس در شکم:", opt: ["سردی", "متعادل", "گرمی و سوزش"]},
+    {q: "سرعت حرف زدن:", opt: ["آهسته", "متوسط", "سریع"]},
+    {q: "علاقه به ورزش:", opt: ["کم", "متوسط", "زیاد"]},
+    {q: "احساس تشنگی:", opt: ["کم", "متوسط", "زیاد"]},
+    {q: "کیفیت پوست بدن:", opt: ["نرم و مرطوب", "متوسط", "خشک و زبر"]},
+    {q: "میل به طعم:", opt: ["شیرین", "متعادل", "ترش و شور"]},
+    {q: "احساس روحی غالب:", opt: ["غم و افسردگی", "متعادل", "عصبانیت"]},
+    {q: "سرعت چاق شدن:", opt: ["خیلی سریع", "متوسط", "سخت چاق می‌شوم"]},
+    {q: "میزان ریزش مو:", opt: ["زیاد", "متوسط", "کم"]},
+    {q: "میل جنسی:", opt: ["کم", "متوسط", "زیاد"]},
+    {q: "انگیزه روزانه:", opt: ["کم", "متوسط", "بالا"]}
+];
+
+const box = document.getElementById("questions");
+questions.forEach((item, i) => {
+    let html = `<div class="question"><p><strong>${i+1}. ${item.q}</strong></p>`;
+    item.opt.forEach((option, index) => {
+        html += `<label><input type="radio" name="q\( {i}" value=" \){index}"> ${option}</label>`;
+    });
+    html += `</div>`;
+    box.innerHTML += html;
+});
+
+function showResult() {
+    const name = document.getElementById("name").value.trim();
+    const age = document.getElementById("age").value;
+
+    if (!name || !age) {
+        alert("لطفاً نام و سن خود را وارد کنید");
+        return;
+    }
+
+    let balghami = 0, damavi = 0, safravi = 0, sodavi = 0;
+
+    questions.forEach((_, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) return;
+        const val = parseInt(selected.value);
+
+        if (val === 0) { balghami += 4; sodavi += 1; }
+        else if (val === 1) { damavi += 2; }
+        else if (val === 2) { safravi += 4; damavi += 1; }
+    });
+
+    const total = balghami + damavi + safravi + sodavi || 1;
+    const percentages = {
+        balghami: Math.round((balghami / total) * 100),
+        damavi: Math.round((damavi / total) * 100),
+        safravi: Math.round((safravi / total) * 100),
+        sodavi: Math.round((sodavi / total) * 100)
+    };
+
+    const dominantKey = Object.keys(percentages).reduce((a, b) => percentages[a] > percentages[b] ? a : b);
+    let dominantName = dominantKey === "balghami" ? "بلغمی (سرد و تر)" :
+                       dominantKey === "damavi" ? "دموی (گرم و تر)" :
+                       dominantKey === "safravi" ? "صفراوی (گرم و خشک)" : "سوداوی (سرد و خشک)";
+
+    document.getElementById("report").innerHTML = `
+        <div class="report-item"><strong>نام:</strong> ${name}</div>
+        <div class="report-item"><strong>سن:</strong> ${age} سال</div>
+        <div class="dominant">مزاج غالب: \( {dominantName} ( \){percentages[dominantKey]}%)</div>
+        <hr>
+        <div class="report-item">بلغمی: ${percentages.balghami}%</div>
+        <div class="report-item">دموی: ${percentages.damavi}%</div>
+        <div class="report-item">صفراوی: ${percentages.safravi}%</div>
+        <div class="report-item">سوداوی: ${percentages.sodavi}%</div>
+    `;
+
+    // نمودار
+    const ctx = document.getElementById('mizajChart');
+    if (window.chartInstance) window.chartInstance.destroy();
+
+    window.chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['بلغمی', 'دموی', 'صفراوی', 'سوداوی'],
+            datasets: [{
+                data: Object.values(percentages),
+                backgroundColor: ['#4fc3f7', '#ef5350', '#ffca28', '#78909c'],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { font: { size: 15 }, padding: 20 } }
+            }
+        }
+    });
+
+    document.getElementById("result").style.display = "block";
+}
+</script>
+</body>
+</html>
