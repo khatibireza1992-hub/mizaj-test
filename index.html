@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تست مزاج و لاغری - اندام برتر</title>
+    <title>تست مزاج و لاغری</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {font-family: Tahoma; background:#e8f5e9; margin:0; padding:15px;}
         .container {max-width:800px; margin:auto; background:white; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.1); overflow:hidden;}
         h1 {text-align:center; background:#1d5c3f; color:white; padding:25px; margin:0;}
-        input {width:100%; padding:14px; margin:10px 0; border:2px solid #4caf50; border-radius:10px; font-size:17px;}
+        input {width:100%; padding:14px; margin:10px 0; border:2px solid #4caf50; border-radius:10px;}
         .question {background:#f1f8f3; padding:18px; margin:12px 0; border-radius:12px;}
         label {display:block; padding:12px; margin:8px 0; background:white; border-radius:8px;}
         button {width:90%; margin:25px auto; display:block; padding:18px; background:#1d5c3f; color:white; border:none; border-radius:12px; font-size:19px;}
@@ -18,12 +18,11 @@
 </head>
 <body>
 <div class="container">
-    <h1>🧬 تست جامع مزاج و لاغری</h1>
+    <h1>🧬 تست مزاج و لاغری</h1>
     
     <div style="padding:20px;">
         <p><strong>نام:</strong></p>
-        <input type="text" id="name" placeholder="نام و نام خانوادگی">
-
+        <input type="text" id="name" placeholder="نام خود را وارد کنید">
         <p><strong>سن:</strong></p>
         <input type="number" id="age" placeholder="سن شما">
     </div>
@@ -67,12 +66,10 @@ questions.forEach((item, i) => {
 function showResult() {
     const name = document.getElementById("name").value.trim();
     const age = document.getElementById("age").value;
-
     if (!name || !age) return alert("نام و سن را وارد کنید");
 
     let score = 0;
     let answered = 0;
-
     questions.forEach((_, i) => {
         const ans = document.querySelector(`input[name="q${i}"]:checked`);
         if (ans) {
@@ -82,23 +79,13 @@ function showResult() {
     });
 
     const percent = answered > 0 ? Math.round((score / (answered * 2)) * 100) : 0;
+    const mizaj = percent > 60 ? "گرم" : percent > 35 ? "متعادل" : "سرد";
 
-    let mizaj = percent > 60 ? "گرم" : percent > 35 ? "متعادل" : "سرد";
+    document.getElementById("report").innerHTML = `<p>نام: ${name}</p><p>سن: ${age}</p><p>مزاج غالب: ${mizaj}</p><p>امتیاز: ${percent}%</p>`;
 
-    document.getElementById("report").innerHTML = `
-        <p><strong>نام:</strong> ${name}</p>
-        <p><strong>سن:</strong> ${age} سال</p>
-        <p><strong>مزاج غالب:</strong> ${mizaj}</p>
-        <p><strong>امتیاز:</strong> ${percent}%</p>
-    `;
-
-    const ctx = document.getElementById("mizajChart");
-    new Chart(ctx, {
+    new Chart(document.getElementById("mizajChart"), {
         type: 'doughnut',
-        data: {
-            labels: ['سرد', 'متعادل', 'گرم'],
-            datasets: [{ data: [100 - percent, 30, percent], backgroundColor: ['#42a5f5', '#66bb6a', '#ff9800'] }]
-        }
+        data: { labels: ['سرد', 'متعادل', 'گرم'], datasets: [{ data: [100-percent, 30, percent], backgroundColor: ['#42a5f5', '#66bb6a', '#ff9800'] }] }
     });
 
     document.getElementById("result").style.display = "block";
