@@ -190,8 +190,14 @@ function showResult() {
                        dominantKey === "safravi" ? "صفراوی (گرم و خشک)" : "سوداوی (سرد و خشک)";
 
     document.getElementById("report").innerHTML = `
-        <div class="report-item"><strong>نام:</strong> ${name}</div>
-        <div class="report-item"><strong>سن:</strong> ${age} سال</div>
+        <div class="report-item">
+نام: ${name || "ثبت نشده"}
+</div>
+
+<div class="report-item">
+سن: ${age || "ثبت نشده"}
+</div>
+        
         <div class="dominant">مزاج غالب: ${dominantName} (${percentages[dominantKey]}%)</div>
         <hr>
         <div class="report-item">بلغمی: ${percentages.balghami}%</div>
