@@ -620,4 +620,28 @@ function showResult() {
 
   // chart
   if(window.chartInst) window.chartInst.destroy();
-  window.chartInst = new Chart(documen
+  window.chartInst = new Chart(document.getElementById('mizajChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['بلغمی','دموی','صفراوی','سوداوی'],
+      datasets: [{
+        data: [pct.balghami, pct.damavi, pct.safravi, pct.sodavi],
+        backgroundColor: ['#4fc3f7','#66bb6a','#ffa726','#78909c'],
+        borderWidth: 3,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position:'bottom', labels:{ font:{size:13}, padding:16 } }
+      }
+    }
+  });
+
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
