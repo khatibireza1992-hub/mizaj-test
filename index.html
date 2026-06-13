@@ -1,763 +1,623 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تست جامع مزاج و لاغری - اندام برتر</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <style>
-        body {
-            font-family: Tahoma, sans-serif;
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-            margin: 0;
-            padding: 15px;
-        }
-        .container {
-    max-width: 700px;
-        
-            margin: auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        h1 {
-            text-align: center;
-            color: #1d5c3f;
-            padding: 25px;
-            margin: 0;
-            background: #f1f8f3;
-        }
-        .section { padding: 20px; }
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 14px;
-            margin: 8px 0;
-            border: 2px solid #81c784;
-            border-radius: 10px;
-            font-size: 17px;
-        }
-        .question {
-            background: #f8fff8;
-                padding: 12px;
-    margin: 8px 0;
-    
-            border-radius: 15px;
-            border: 1px solid #81c784;
-        }
-        label {
-            display: block;
-                padding: 8px;
-    margin: 4px 0;
-    font-size:15px;
-            background: white;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-        label:hover { background: #e8f5e9; }
-        button {
-            width: 90%;
-            margin: 25px auto;
-            display: block;
-            padding: 18px;
-            background: #1d5c3f;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 19px;
-            font-weight: bold;
-        }
-        .result {
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تست جامع مزاج - اندام برتر</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Tahoma, sans-serif;
+    background: #0d1b2a;
+    min-height: 100vh;
+    padding: 20px 15px 40px;
+    color: #333;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: auto;
+  }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 40px 20px 30px;
+    color: white;
+  }
+  .hero-icon {
+    font-size: 52px;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #a8d5ba;
+    margin-bottom: 8px;
+  }
+  .hero p {
+    font-size: 14px;
+    color: #7a9bb0;
+    line-height: 1.8;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: #1a2e3f;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .progress-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: #0d1b2a;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2e7d32, #a8d5ba);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-label {
+    font-size: 13px;
+    color: #a8d5ba;
+    white-space: nowrap;
+  }
+
+  /* CARD */
+  .card {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    margin-bottom: 16px;
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, #1b4332, #2d6a4f);
+    padding: 20px 24px;
+  }
+  .card-header h2 {
+    color: #a8d5ba;
+    font-size: 16px;
+    font-weight: normal;
+    margin-bottom: 4px;
+  }
+  .card-header p {
+    color: #d8f3dc;
+    font-size: 13px;
+    opacity: 0.8;
+  }
+
+  .card-body { padding: 24px; }
+
+  /* INPUTS */
+  .input-group {
+    margin-bottom: 16px;
+  }
+  .input-group label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+  .input-group input {
+    width: 100%;
+    padding: 13px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: Tahoma, sans-serif;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .input-group input:focus {
+    border-color: #2d6a4f;
+  }
+
+  /* QUESTIONS */
+  .question-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 22px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    border-right: 4px solid #2d6a4f;
+  }
+  .question-num {
+    font-size: 11px;
+    color: #2d6a4f;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .question-text {
+    font-size: 15px;
+    color: #1a1a1a;
+    font-weight: bold;
+    margin-bottom: 14px;
+    line-height: 1.7;
+  }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 2px solid #e8f5e9;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: all 0.2s;
+    background: #fafafa;
+  }
+  .option-label:hover {
+    border-color: #2d6a4f;
+    background: #f0faf2;
+  }
+  .option-label input[type="radio"] { display: none; }
+  .option-label.selected {
+    border-color: #2d6a4f;
+    background: #e8f5e9;
+    color: #1b4332;
+    font-weight: bold;
+  }
+  .option-dot {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .option-label.selected .option-dot {
+    border-color: #2d6a4f;
+    background: #2d6a4f;
+    box-shadow: inset 0 0 0 3px white;
+  }
+
+  /* BUTTON */
+  .btn-main {
+    width: 100%;
+    padding: 17px;
+    background: linear-gradient(135deg, #1b4332, #2d6a4f);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Tahoma, sans-serif;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: opacity 0.2s, transform 0.1s;
+    letter-spacing: 1px;
+  }
+  .btn-main:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-main:active { transform: translateY(0); }
+
+  /* RESULT */
+  #result { display: none; }
+
+  .result-hero {
+    background: linear-gradient(135deg, #1b4332, #2d6a4f);
+    border-radius: 18px;
+    padding: 32px 24px;
+    text-align: center;
+    color: white;
+    margin-bottom: 16px;
+  }
+  .result-hero .name-tag {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-bottom: 6px;
+  }
+  .result-hero .mizaj-name {
+    font-size: 28px;
+    font-weight: bold;
+    color: #a8d5ba;
+    margin-bottom: 8px;
+  }
+  .result-hero .mizaj-pct {
+    font-size: 15px;
+    opacity: 0.8;
+  }
+  .result-hero .mizaj-icon { font-size: 48px; margin-bottom: 12px; }
+
+  .scores-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .score-card {
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .score-card .sc-icon { font-size: 24px; margin-bottom: 6px; }
+  .score-card .sc-name { font-size: 13px; color: #666; margin-bottom: 4px; }
+  .score-card .sc-pct { font-size: 22px; font-weight: bold; }
+  .score-card.dominant { border: 2px solid #2d6a4f; }
+  .score-card.dominant .sc-pct { color: #2d6a4f; }
+
+  .info-card {
+    background: white;
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .info-card h3 {
+    color: #1b4332;
+    font-size: 16px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e8f5e9;
+  }
+  .info-card p, .info-card li {
+    font-size: 14px;
+    color: #444;
+    line-height: 2;
+  }
+  .info-card ul { padding-right: 18px; }
+
+  .chart-card {
+    background: white;
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    text-align: center;
+  }
+  .chart-card h3 {
+    color: #1b4332;
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+  canvas { max-width: 280px; max-height: 280px; margin: auto; display: block; }
+
+  .cta-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #1b4332, #2d6a4f);
+    color: white;
+    text-decoration: none;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+
+  .error-msg {
+    background: #fff3f3;
+    border: 1px solid #f5c6cb;
+    color: #c0392b;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 14px;
     display: none;
-    padding: 15px;
-        }
-        .report-item { font-size: 18px; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .dominant { font-size: 24px; font-weight: bold; color: #2e7d32; text-align: center; margin: 15px 0; }
-        a{
-    display:block;
-    width:180px;
-    margin:10px auto;
-    padding:8px;
-    background:#1d5c3f;
-    color:white;
-    text-decoration:none;
-    border-radius:8px;
-    text-align:center;
-    font-size:14px;
-        }
-        canvas{
-    max-width:100%;
-    max-height:250px;
-    margin-top:20px;
-        }
-            
-    
-    </style>
+  }
+</style>
 </head>
 <body>
 <div class="container">
-    <h1>🧬 تست جامع مزاج و لاغری</h1>
 
-    <div class="section">
-        <p><strong>نام و نام خانوادگی:</strong></p>
-        <input type="text" id="name" placeholder="نام خود را وارد کنید">
+  <div class="hero">
+    <span class="hero-icon">🧬</span>
+    <h1>تست جامع مزاج طب سنتی</h1>
+    <p>با پاسخ به ۳۰ سوال تخصصی، مزاج غالب بدن خود را بشناسید<br>و راهنمای تغذیه و سلامت مخصوص خود را دریافت کنید</p>
+  </div>
 
-        <p><strong>سن:</strong></p>
-        <input type="number" id="age" placeholder="سن خود را وارد کنید">
+  <!-- فرم اطلاعات -->
+  <div class="card" id="infoCard">
+    <div class="card-header">
+      <h2>اطلاعات اولیه</h2>
+      <p>برای دریافت گزارش شخصی‌سازی‌شده وارد کنید</p>
     </div>
-
-    <div id="questions" class="section"></div>
-
-    <button onclick="showResult()">مشاهده نتیجه تست</button>
-
-    <div id="result" class="result">
-        <h2 style="text-align:center; color:#1d5c3f;">گزارش کامل مزاج و لاغری شما</h2>
-        <div id="report"></div>
-        <canvas id="mizajChart"></canvas>
-        
-        <a href="https://rubika.ir/andam_bartar_1" target="_blank">
-📲 ارتباط با مشاور
-</a>
+    <div class="card-body">
+      <div class="input-group">
+        <label>نام و نام خانوادگی</label>
+        <input type="text" id="name" placeholder="مثال: علی رضایی">
+      </div>
+      <div class="input-group">
+        <label>سن</label>
+        <input type="number" id="age" placeholder="مثال: ۳۵" min="10" max="100">
+      </div>
     </div>
+  </div>
+
+  <!-- نوار پیشرفت -->
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <span class="progress-label" id="progressLabel">۰ از ۳۰</span>
+  </div>
+
+  <!-- سوالات -->
+  <div id="questionsWrap"></div>
+
+  <div class="error-msg" id="errorMsg">⚠️ لطفاً به تمام سوالات پاسخ دهید</div>
+
+  <button class="btn-main" onclick="showResult()">مشاهده نتیجه تست ←</button>
+
+  <!-- نتیجه -->
+  <div id="result">
+    <div class="result-hero" id="resultHero"></div>
+    <div class="scores-grid" id="scoresGrid"></div>
+    <div class="chart-card">
+      <h3>نمودار توزیع مزاج شما</h3>
+      <canvas id="mizajChart"></canvas>
+    </div>
+    <div class="info-card" id="infoDetail"></div>
+    <a class="cta-btn" href="https://rubika.ir/andam_bartar_1" target="_blank">📲 مشاوره رایگان با متخصص تغذیه</a>
+  </div>
+
 </div>
 
 <script>
-// ۳۰ سوال حرفه‌ای
 const questions = [
-    {q: "دمای دست و پای شما معمولاً چگونه است؟", opt: ["سرد", "متعادل", "گرم"]},
-    {q: "تحمل شما در برابر سرما چقدر است؟", opt: ["بالا (دوست دارم)", "متوسط", "پایین (سردم می‌شود)"]},
-    {q: "تحمل شما در برابر گرما چقدر است؟", opt: ["پایین (گرمم می‌شود)", "متوسط", "بالا (دوست دارم)"]},
-    {q: "پوست صورت و بدن شما:", opt: ["خشک و پوسته‌پوسته", "متعادل", "چرب و مرطوب"]},
-    {q: "رنگ چهره شما بیشتر:", opt: ["سفید و کم‌رنگ", "متوسط", "سرخ و برافروخته"]},
-    {q: "موهای شما:", opt: ["نازک و شکننده", "متوسط", "ضخیم و پرپشت"]},
-    {q: "خواب شما:", opt: ["زیاد و سنگین", "متوسط و منظم", "کم و سبک"]},
-    {q: "اشتهای شما:", opt: ["کم", "متوسط", "زیاد و شدید"]},
-    {q: "سرعت هضم غذا:", opt: ["کند با نفخ", "متوسط", "سریع (زود گرسنه می‌شوم)"]},
-    {q: "میل به غذاهای:", opt: ["گرم و تند", "متعادل", "سرد و تر"]},
-    {q: "سطح انرژی روزانه:", opt: ["کم و خسته", "متوسط", "بالا و پرانرژی"]},
-    {q: "خلق و خوی غالب:", opt: ["آرام و ساکت", "متعادل", "فعال و اجتماعی"]},
-    {q: "تعریق بدن:", opt: ["کم", "متوسط", "زیاد"]},
-    {q: "مدفوع معمول:", opt: ["سفت و خشک", "متوسط", "شل"]},
-    {q: "تمرکز و حافظه:", opt: ["عمیق اما کند", "متوسط", "سریع و متغیر"]},
-    {q: "واکنش به استرس:", opt: ["آرام", "متوسط", "عصبی"]},
-    {q: "اندام کلی بدن:", opt: ["چاق و پفکی", "متوسط", "لاغر و استخوانی"]},
-    {q: "دمای بدن در استراحت:", opt: ["کم", "متعادل", "بالا"]},
-    {q: "علاقه به فصل:", opt: ["زمستان", "متعادل", "تابستان"]},
-    {q: "احساس در شکم:", opt: ["سردی", "متعادل", "گرمی و سوزش"]},
-    {q: "سرعت حرف زدن:", opt: ["آهسته", "متوسط", "سریع"]},
-    {q: "علاقه به ورزش:", opt: ["کم", "متوسط", "زیاد"]},
-    {q: "احساس تشنگی:", opt: ["کم", "متوسط", "زیاد"]},
-    {q: "کیفیت پوست بدن:", opt: ["نرم و مرطوب", "متوسط", "خشک و زبر"]},
-    {q: "میل به طعم:", opt: ["شیرین", "متعادل", "ترش و شور"]},
-    {q: "احساس روحی غالب:", opt: ["غم و افسردگی", "متعادل", "عصبانیت"]},
-    {q: "سرعت چاق شدن:", opt: ["خیلی سریع", "متوسط", "سخت چاق می‌شوم"]},
-    {q: "میزان ریزش مو:", opt: ["زیاد", "متوسط", "کم"]},
-    {q: "میل جنسی:", opt: ["کم", "متوسط", "زیاد"]},
-    {q: "انگیزه روزانه:", opt: ["کم", "متوسط", "بالا"]}
+  {q:"دمای دست و پای شما در حالت عادی و بدون فعالیت چگونه است؟", opt:["سرد و یخ — حتی در هوای گرم", "متعادل و نرمال", "گرم و داغ — حتی در هوای سرد"]},
+  {q:"تحمل شما در برابر هوای سرد چقدر است؟", opt:["خوب — سرما را دوست دارم", "متوسط — نه خیلی سرد نه خیلی گرم", "ضعیف — سرما اذیتم می‌کند"]},
+  {q:"تحمل شما در برابر هوای گرم و آفتاب چقدر است؟", opt:["ضعیف — گرما اذیتم می‌کند", "متوسط", "خوب — گرما را دوست دارم"]},
+  {q:"وضعیت پوست صورت و بدن شما بیشتر چگونه است؟", opt:["خشک، پوسته‌پوسته و کدر", "متعادل و شاداب", "چرب، براق یا مستعد جوش"]},
+  {q:"رنگ طبیعی چهره شما بیشتر به کدام نزدیک‌تر است؟", opt:["کم‌رنگ، زرد یا سفید", "گلگون و طبیعی", "سرخ، برافروخته یا تیره"]},
+  {q:"وضعیت موهای شما:", opt:["نازک، شکننده و ریزش زیاد", "متوسط و معمولی", "ضخیم، پرپشت و براق"]},
+  {q:"کیفیت خواب شبانه شما معمولاً چگونه است؟", opt:["زیاد و سنگین — سخت بیدار می‌شوم", "منظم و کافی", "کم، سبک و با افکار زیاد"]},
+  {q:"میزان اشتهای شما به غذا چطور است؟", opt:["کم — گاهی یادم می‌رود بخورم", "متوسط و منظم", "زیاد — زود گرسنه می‌شوم"]},
+  {q:"سرعت هضم و گوارش غذا در شما چگونه است؟", opt:["کند — نفخ و سنگینی دارم", "معمولی", "سریع — زود هضم می‌کنم"]},
+  {q:"تمایل شما به کدام دسته از غذاها بیشتر است؟", opt:["گرم، تند و ادویه‌دار", "متنوع و بدون تمایل خاص", "سرد، ترش یا آبکی"]},
+  {q:"سطح انرژی شما در طول روز چطور است؟", opt:["پایین — زود خسته می‌شوم", "متوسط و پایدار", "بالا — پرانرژی و فعال"]},
+  {q:"خلق و خوی غالب شما کدام است؟", opt:["آرام، کند و کم‌حرف", "متعادل و شاد", "تند، عصبی یا پرحرف"]},
+  {q:"میزان تعریق بدن شما چقدر است؟", opt:["خیلی کم — به ندرت عرق می‌کنم", "متوسط", "زیاد — حتی با فعالیت کم"]},
+  {q:"وضعیت مدفوع شما معمولاً چگونه است؟", opt:["سفت، خشک یا یبوست", "منظم و طبیعی", "شل یا اسهال مکرر"]},
+  {q:"قدرت تمرکز و حافظه شما چگونه است؟", opt:["عمیق ولی کند — دیر یاد می‌گیرم اما فراموش نمی‌کنم", "متوسط", "سریع ولی فراموشکار"]},
+  {q:"واکنش شما به استرس و فشار روانی چیست؟", opt:["گوشه‌گیری و سکوت", "کنترل و مدیریت", "عصبانیت، بی‌قراری یا اضطراب"]},
+  {q:"اندام و ساختار بدنی شما بیشتر به کدام نزدیک است؟", opt:["درشت، چاق یا آماس‌دار", "متوسط و متناسب", "لاغر، استخوانی یا کم‌گوشت"]},
+  {q:"دمای بدن شما در حالت استراحت چطور احساس می‌شود؟", opt:["سرد", "معمولی", "گرم"]},
+  {q:"کدام فصل را بیشتر دوست دارید؟", opt:["تابستان — گرما برایم خوب است", "بهار یا پاییز", "زمستان — هوای سرد را دوست دارم"]},
+  {q:"احساس شما در ناحیه شکم و معده معمولاً چگونه است؟", opt:["سردی و کرامپ", "آرام و بدون مشکل", "گرمی، سوزش یا ترش‌کردن"]},
+  {q:"سرعت صحبت کردن و تصمیم‌گیری شما:", opt:["آهسته و با دقت زیاد", "متعادل", "سریع و آنی"]},
+  {q:"علاقه و انگیزه شما برای ورزش و فعالیت بدنی:", opt:["کم — ترجیح می‌دهم بنشینم", "متوسط", "زیاد — بدنم نیاز به تحرک دارد"]},
+  {q:"احساس تشنگی شما در طول روز چقدر است؟", opt:["کم — به ندرت تشنه می‌شوم", "متوسط", "زیاد — مدام آب می‌خورم"]},
+  {q:"بافت پوست بدن شما (نه صورت) چگونه است؟", opt:["نرم، مرطوب یا سست", "معمولی", "خشک، زبر یا سفت"]},
+  {q:"تمایل طبیعی شما به کدام طعم است؟", opt:["شیرین یا چرب", "متنوع", "ترش، شور یا تلخ"]},
+  {q:"احساس غالب روحی شما در اکثر اوقات:", opt:["غم، دلتنگی یا وسواس فکری", "شاد و متعادل", "خشم، حسادت یا بی‌قراری"]},
+  {q:"سرعت تغییر وزن بدن شما چگونه است؟", opt:["خیلی سریع چاق می‌شوم", "متوسط", "سخت چاق می‌شوم — هر چه بخورم وزن نمی‌گیرم"]},
+  {q:"میزان ریزش مو در شما چقدر است؟", opt:["زیاد — نگرانم", "متوسط و طبیعی", "کم یا اصلاً ریزش ندارم"]},
+  {q:"احساس شما بعد از خوردن غذای سنگین چیست؟", opt:["سنگینی، خواب‌آلودگی و تنبلی", "معمولی و طبیعی", "گرما، سوزش یا بی‌قراری"]},
+  {q:"انگیزه و شور زندگی شما در طول روز چقدر است؟", opt:["کم — بی‌انگیزه و خسته", "متوسط", "زیاد — همیشه برنامه و ایده دارم"]}
 ];
 
-const box = document.getElementById("questions");
+// امتیازدهی
+const scoring = [
+  [[4,1,0],[0,3,0],[0,1,4]],
+  [[4,0,0],[0,2,0],[0,1,4]],
+  [[0,1,4],[0,2,0],[4,0,0]],
+  [[0,1,4],[0,2,0],[5,0,0]],
+  [[3,0,0],[0,3,0],[0,3,2]],
+  [[0,0,3],[0,2,0],[3,1,0]],
+  [[4,0,0],[0,2,0],[0,1,4]],
+  [[4,0,0],[0,2,0],[0,0,4]],
+  [[4,0,0],[0,2,0],[0,1,4]],
+  [[0,0,3],[0,2,0],[4,0,0]],
+  [[4,0,0],[0,2,0],[0,0,4]],
+  [[0,0,3],[0,2,0],[0,0,3]],
+  [[0,0,2],[0,2,0],[0,0,4]],
+  [[0,0,4],[0,2,0],[4,0,0]],
+  [[0,0,4],[0,2,0],[0,0,3]],
+  [[3,0,0],[0,2,0],[0,0,4]],
+  [[5,0,0],[0,2,0],[0,0,5]],
+  [[4,0,0],[0,2,0],[0,0,4]],
+  [[0,0,3],[0,3,0],[2,0,0]],
+  [[4,0,0],[0,2,0],[0,0,5]],
+  [[3,0,0],[0,2,0],[0,0,4]],
+  [[4,0,0],[0,2,0],[0,0,4]],
+  [[3,0,0],[0,2,0],[0,0,4]],
+  [[5,0,0],[0,2,0],[0,0,5]],
+  [[4,0,0],[0,2,0],[0,0,4]],
+  [[0,0,5],[0,2,0],[0,0,5]],
+  [[5,0,0],[0,2,0],[0,0,5]],
+  [[0,0,4],[0,2,0],[3,0,0]],
+  [[4,0,2],[0,2,0],[0,0,4]],
+  [[4,0,0],[0,2,0],[0,0,5]]
+];
+// scoring[i][val] = [balghami, damavi, safravi, sodavi]
+// برای سادگی: [0]=بلغمی [1]=دموی [2]=صفراوی [3]=سوداوی
+const scoringFull = [
+  [[4,0,0,1],[0,3,0,0],[0,1,4,0]],
+  [[4,0,0,0],[0,2,0,0],[0,1,4,0]],
+  [[0,1,4,0],[0,2,0,0],[4,0,0,0]],
+  [[0,1,0,4],[0,2,0,0],[5,0,0,0]],
+  [[3,0,0,0],[0,3,0,0],[0,0,2,3]],
+  [[0,0,0,3],[0,2,0,0],[3,1,0,0]],
+  [[4,0,0,0],[0,2,0,0],[0,0,4,1]],
+  [[4,0,0,0],[0,2,0,0],[0,0,4,0]],
+  [[4,0,0,0],[0,2,0,0],[0,1,4,0]],
+  [[0,0,3,0],[0,2,0,0],[4,0,0,0]],
+  [[4,0,0,0],[0,2,0,0],[0,0,4,0]],
+  [[0,0,0,3],[0,2,0,0],[0,0,3,0]],
+  [[0,0,0,2],[0,2,0,0],[0,0,4,0]],
+  [[0,0,0,4],[0,2,0,0],[4,0,0,0]],
+  [[0,0,0,4],[0,2,0,0],[0,0,3,0]],
+  [[3,0,0,0],[0,2,0,0],[0,0,4,0]],
+  [[5,0,0,0],[0,2,0,0],[0,0,0,5]],
+  [[4,0,0,0],[0,2,0,0],[0,0,4,0]],
+  [[0,0,3,0],[0,3,0,0],[2,0,0,0]],
+  [[4,0,0,0],[0,2,0,0],[0,0,5,0]],
+  [[3,0,0,0],[0,2,0,0],[0,0,4,0]],
+  [[4,0,0,0],[0,2,0,0],[0,0,4,0]],
+  [[3,0,0,0],[0,2,0,0],[0,0,4,0]],
+  [[5,0,0,0],[0,2,0,0],[0,0,0,5]],
+  [[4,0,0,0],[0,2,0,0],[0,0,0,4]],
+  [[0,0,0,5],[0,2,0,0],[0,0,5,0]],
+  [[5,0,0,0],[0,2,0,0],[0,0,0,5]],
+  [[0,0,4,0],[0,2,0,0],[3,0,0,0]],
+  [[4,0,0,2],[0,2,0,0],[0,0,4,0]],
+  [[4,0,0,0],[0,2,0,0],[0,0,5,0]]
+];
+
+const mizajInfo = {
+  balghami: {
+    name: "بلغمی (سرد و تر)",
+    icon: "💧",
+    color: "#4fc3f7",
+    desc: "مزاج بلغمی با طبیعت سرد و مرطوب شناخته می‌شود. افراد بلغمی معمولاً آرام، صبور و اجتماعی هستند اما ممکن است به کاهلی و اضافه وزن تمایل داشته باشند.",
+    food: ["غذاهای گرم و خشک مانند زنجبیل، دارچین و فلفل", "گوشت قرمز و مرغ بخارپز", "عسل و خرما", "سبزیجات پخته و حبوبات"],
+    avoid: ["لبنیات زیاد به‌ویژه شیر سرد", "غذاهای چرب و سرخ‌شده", "نوشیدنی‌های سرد و یخ", "آرد سفید و شیرینی‌های صنعتی"]
+  },
+  damavi: {
+    name: "دموی (گرم و تر)",
+    icon: "🌿",
+    color: "#66bb6a",
+    desc: "مزاج دموی متعادل‌ترین نوع مزاج است. افراد دموی معمولاً شاد، اجتماعی، پرانرژی و با سلامت خوب هستند. این مزاج در طب سنتی ایده‌آل‌ترین حالت شناخته می‌شود.",
+    food: ["میوه‌های تازه و فصلی", "سبزیجات تازه و رنگارنگ", "ماهی و مرغ", "غلات کامل و آجیل"],
+    avoid: ["پرخوری", "غذاهای بسیار تند و پرادویه", "الکل و دخانیات", "بی‌خوابی و استرس زیاد"]
+  },
+  safravi: {
+    name: "صفراوی (گرم و خشک)",
+    icon: "🔥",
+    color: "#ffa726",
+    desc: "مزاج صفراوی با طبیعت گرم و خشک همراه است. افراد صفراوی معمولاً پرانرژی، باهوش و رهبر هستند اما ممکن است به عصبانیت، بی‌خوابی و مشکلات گوارشی تمایل داشته باشند.",
+    food: ["غذاهای سرد و مرطوب مانند کدو، خیار و کاهو", "ماست و دوغ", "آب‌میوه‌های طبیعی خنک", "ماهی و مرغ کبابی"],
+    avoid: ["غذاهای تند، فلفل و ادویه‌جات زیاد", "گوشت قرمز زیاد", "نوشیدنی‌های گرم مانند قهوه و چای پررنگ", "روغن‌های اشباع و سرخ‌شدنی"]
+  },
+  sodavi: {
+    name: "سوداوی (سرد و خشک)",
+    icon: "🍂",
+    color: "#78909c",
+    desc: "مزاج سوداوی با طبیعت سرد و خشک همراه است. افراد سوداوی معمولاً دقیق، خلاق و عمیق هستند اما ممکن است به افسردگی، وسواس و مشکلات پوستی تمایل داشته باشند.",
+    food: ["غذاهای گرم و مرطوب مانند سوپ و آش", "عسل، انجیر و انگور", "روغن زیتون و آجیل‌های چرب", "ادویه‌های گرم مانند زعفران و هل"],
+    avoid: ["غذاهای سرد و خشک", "سبزیجات خام زیاد در هوای سرد", "نگرانی و استرس مزمن", "بی‌خوابی و کم‌خوابی"]
+  }
+};
+
+// ساخت سوالات
+const wrap = document.getElementById("questionsWrap");
 questions.forEach((item, i) => {
-    let html = `<div class="question"><p><strong>${i+1}. ${item.q}</strong></p>`;
-    item.opt.forEach((option, index) => {
-        html += `<label><input type="radio" name="q${i}" value="${index}"> ${option}</label>`;
-    });
-    html += `</div>`;
-    box.innerHTML += html;
+  let html = `<div class="question-card">
+    <div class="question-num">سوال ${i+1} از ۳۰</div>
+    <div class="question-text">${item.q}</div>
+    <div class="options">`;
+  item.opt.forEach((opt, j) => {
+    html += `<label class="option-label" id="lbl_${i}_${j}" onclick="selectOption(${i},${j})">
+      <input type="radio" name="q${i}" value="${j}">
+      <span class="option-dot"></span>
+      ${opt}
+    </label>`;
+  });
+  html += `</div></div>`;
+  wrap.innerHTML += html;
 });
+
+function selectOption(qi, vi) {
+  for(let j=0; j<3; j++) {
+    const lbl = document.getElementById(`lbl_${qi}_${j}`);
+    if(lbl) lbl.classList.remove('selected');
+  }
+  const sel = document.getElementById(`lbl_${qi}_${vi}`);
+  if(sel) sel.classList.add('selected');
+  updateProgress();
+}
+
+function updateProgress() {
+  let answered = 0;
+  for(let i=0; i<30; i++) {
+    if(document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+  }
+  const pct = Math.round((answered/30)*100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = answered + ' از ۳۰';
+}
 
 function showResult() {
-    const name = document.getElementById("name").value.trim();
-    const age = document.getElementById("age").value;
-
-
-    let balghami = 0, damavi = 0, safravi = 0, sodavi = 0;
-
-    questions.forEach((_, i) => {
-
-const selected =
-document.querySelector(`input[name="q${i}"]:checked`);
-
-if(!selected) return;
-
-const val=parseInt(selected.value);
-
-/* سوال 1 */
-if(i===0){
-
-if(val===0){
-balghami+=4;
-sodavi+=1;
-}
-
-if(val===1){
-damavi+=3;
-}
-
-if(val===2){
-safravi+=4;
-damavi+=1;
-}
-
-}
-
-/* سوال 2 */
-if(i===1){
-
-if(val===0){
-balghami+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-damavi+=1;
-}
-
-}
-
-/* سوال 3 */
-if(i===2){
-
-if(val===0){
-safravi+=4;
-damavi+=1;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-balghami+=4;
-}
-
-}
-
-/* سوال 4 */
-if(i===3){
-
-if(val===0){
-sodavi+=4;
-safravi+=1;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-balghami+=5;
-}
-
-}
-
-/* سوال 5 */
-if(i===4){
-
-if(val===0){
-balghami+=3;
-}
-
-if(val===1){
-damavi+=3;
-}
-
-if(val===2){
-safravi+=2;
-sodavi+=3;
-}
-
-}
-
-/* سوال 6 */
-if(i===5){
-
-if(val===0){
-sodavi+=3;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-balghami+=3;
-damavi+=1;
-}
-
-}
-
-/* سوال 7 */
-if(i===6){
-
-if(val===0){
-balghami+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-sodavi+=1;
-}
-
-}
-
-/* سوال 8 */
-if(i===7){
-
-if(val===0){
-balghami+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-}
-
-}
-
-/* سوال 9 */
-if(i===8){
-
-if(val===0){
-balghami+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-damavi+=1;
-}
-
-}
-
-/* سوال 10 */
-if(i===9){
-
-if(val===0){
-safravi+=3;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-balghami+=4;
-}
-
-}
-
-/* سوال 11 */
-if(i===10){
-
-if(val===0){
-balghami+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-}
-
-}
-
-/* سوال 12 */
-if(i===11){
-
-if(val===0){
-sodavi+=3;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=3;
-}
-
-}
-
-/* سوال 13 */
-if(i===12){
-
-if(val===0){
-sodavi+=2;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-}
-
-}
-
-/* سوال 14 */
-if(i===13){
-
-if(val===0){
-sodavi+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-balghami+=4;
-}
-
-}
-
-/* سوال 15 */
-if(i===14){
-
-if(val===0){
-sodavi+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=3;
-}
-
-}
-
-/* سوال 16 */
-if(i===15){
-
-if(val===0){
-balghami+=3;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-}
-
-}
-
-/* سوال 17 */
-if(i===16){
-
-if(val===0){
-balghami+=5;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-sodavi+=5;
-}
-
-}
-
-/* سوال 18 */
-if(i===17){
-
-if(val===0){
-balghami+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-}
-
-}
-
-/* سوال 19 */
-if(i===18){
-
-if(val===0){
-balghami+=2;
-}
-
-if(val===1){
-damavi+=3;
-}
-
-if(val===2){
-safravi+=3;
-}
-
-}
-
-/* سوال 20 */
-if(i===19){
-
-if(val===0){
-balghami+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=5;
-}
-
-}
-
-/* سوال 21 */
-if(i===20){
-
-if(val===0){
-balghami+=3;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-}
-
-}
-
-/* سوال 22 */
-if(i===21){
-
-if(val===0){
-balghami+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-}
-
-}
-
-/* سوال 23 */
-if(i===22){
-
-if(val===0){
-balghami+=3;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-}
-
-}
-
-/* سوال 24 */
-if(i===23){
-
-if(val===0){
-balghami+=5;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-sodavi+=5;
-}
-
-}
-
-/* سوال 25 */
-if(i===24){
-
-if(val===0){
-balghami+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-sodavi+=4;
-}
-
-}
-
-/* سوال 26 */
-if(i===25){
-
-if(val===0){
-sodavi+=5;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=5;
-}
-
-}
-
-/* سوال 27 */
-if(i===26){
-
-if(val===0){
-balghami+=5;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=5;
-}
-
-}
-
-/* سوال 28 */
-if(i===27){
-
-if(val===0){
-safravi+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-balghami+=3;
-}
-
-}
-
-/* سوال 29 */
-if(i===28){
-
-if(val===0){
-balghami+=4;
-sodavi+=2;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=4;
-}
-
-}
-
-/* سوال 30 */
-if(i===29){
-
-if(val===0){
-balghami+=4;
-}
-
-if(val===1){
-damavi+=2;
-}
-
-if(val===2){
-safravi+=5;
-}
-
-    }     
-});
-
-    const total = balghami + damavi + safravi + sodavi || 1;
-    const percentages = {
-        balghami: Math.round((balghami / total) * 100),
-        damavi: Math.round((damavi / total) * 100),
-        safravi: Math.round((safravi / total) * 100),
-        sodavi: Math.round((sodavi / total) * 100)
-    };
-
-    const dominantKey = Object.keys(percentages).reduce((a, b) => percentages[a] > percentages[b] ? a : b);
-    let dominantName = dominantKey === "balghami" ? "بلغمی (سرد و تر)" :
-                       dominantKey === "damavi" ? "دموی (گرم و تر)" :
-                       dominantKey === "safravi" ? "صفراوی (گرم و خشک)" : "سوداوی (سرد و خشک)";
-
-    document.getElementById("report").innerHTML = `
-        <div class="report-item">
-نام: ${name || "ثبت نشده"}
-</div>
-
-<div class="report-item">
-سن: ${age || "ثبت نشده"}
-</div>
-        
-        <div class="dominant">مزاج غالب: ${dominantName} (${percentages[dominantKey]}%)</div>
-        <hr>
-        <div class="report-item">بلغمی: ${percentages.balghami}%</div>
-        <div class="report-item">دموی: ${percentages.damavi}%</div>
-        <div class="report-item">صفراوی: ${percentages.safravi}%</div>
-        <div class="report-item">سوداوی: ${percentages.sodavi}%</div>
-    `;
-
-    // نمودار
-    const ctx = document.getElementById('mizajChart');
-    if (window.chartInstance) window.chartInstance.destroy();
-
-    window.chartInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['بلغمی', 'دموی', 'صفراوی', 'سوداوی'],
-            datasets: [{
-                data: Object.values(percentages),
-                backgroundColor: ['#4fc3f7', '#ef5350', '#ffca28', '#78909c'],
-                borderWidth: 3
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: { position: 'bottom', labels: { font: { size: 15 }, padding: 20 } }
-            }
-        }
-    });
-
-    document.getElementById("result").style.display = "block";
-}
-</script>
-</body>
-</html>
+  let balghami=0, damavi=0, safravi=0, sodavi=0;
+  let unanswered = [];
+
+  questions.forEach((_, i) => {
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if(!sel) { unanswered.push(i+1); return; }
+    const val = parseInt(sel.value);
+    const s = scoringFull[i][val];
+    balghami += s[0];
+    damavi   += s[1];
+    safravi  += s[2];
+    sodavi   += s[3];
+  });
+
+  if(unanswered.length > 0) {
+    const err = document.getElementById('errorMsg');
+    err.style.display = 'block';
+    err.textContent = `⚠️ لطفاً به سوالات ${unanswered.join('، ')} پاسخ دهید`;
+    err.scrollIntoView({behavior:'smooth'});
+    return;
+  }
+  document.getElementById('errorMsg').style.display = 'none';
+
+  const total = balghami + damavi + safravi + sodavi || 1;
+  const pct = {
+    balghami: Math.round((balghami/total)*100),
+    damavi:   Math.round((damavi/total)*100),
+    safravi:  Math.round((safravi/total)*100),
+    sodavi:   Math.round((sodavi/total)*100)
+  };
+
+  const domKey = Object.keys(pct).reduce((a,b) => pct[a]>pct[b]?a:b);
+  const info = mizajInfo[domKey];
+  const name = document.getElementById('name').value.trim() || 'کاربر گرامی';
+  const age  = document.getElementById('age').value;
+
+  // result hero
+  document.getElementById('resultHero').innerHTML = `
+    <div class="mizaj-icon">${info.icon}</div>
+    <div class="name-tag">${name} — ${age ? age+' ساله' : ''}</div>
+    <div class="mizaj-name">${info.name}</div>
+    <div class="mizaj-pct">غالب‌ترین مزاج شما با ${pct[domKey]}% تشخیص داده شد</div>
+  `;
+
+  // scores grid
+  const keys = ['balghami','damavi','safravi','sodavi'];
+  let gridHtml = '';
+  keys.forEach(k => {
+    gridHtml += `<div class="score-card ${k===domKey?'dominant':''}">
+      <div class="sc-icon">${mizajInfo[k].icon}</div>
+      <div class="sc-name">${mizajInfo[k].name.split('(')[0]}</div>
+      <div class="sc-pct" style="color:${mizajInfo[k].color}">${pct[k]}%</div>
+    </div>`;
+  });
+  document.getElementById('scoresGrid').innerHTML = gridHtml;
+
+  // info
+  document.getElementById('infoDetail').innerHTML = `
+    <h3>${info.icon} درباره مزاج ${info.name}</h3>
+    <p>${info.desc}</p>
+    <br>
+    <h3>✅ غذاهای مفید برای شما</h3>
+    <ul>${info.food.map(f=>`<li>${f}</li>`).join('')}</ul>
+    <br>
+    <h3>❌ غذاهایی که باید کمتر بخورید</h3>
+    <ul>${info.avoid.map(f=>`<li>${f}</li>`).join('')}</ul>
+  `;
+
+  // chart
+  if(window.chartInst) window.chartInst.destroy();
+  window.chartInst = new Chart(documen
