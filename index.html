@@ -106,6 +106,24 @@ canvas#mizajChart { max-width: 260px; max-height: 260px; margin: auto; display: 
 .contact-whatsapp { background: linear-gradient(135deg, #1faa59, #25D366); color: white; }
 .contact-note { text-align: center; font-size: 11px; color: #5a7a6a; margin-top: 10px; }
 
+/* کارت گزارش - طراحی‌شده برای اسکرین‌شات */
+.report-card { background: linear-gradient(160deg, #0d2b1e 0%, #0a0f1e 100%); border: 2px solid #2d6a4f; border-radius: 18px; padding: 22px 18px; }
+.report-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid #1f3d2d; }
+.report-card-logo { font-size: 14px; font-weight: bold; color: #a8d5ba; }
+.report-card-sub { font-size: 11px; color: #6b8a7a; }
+.report-card-name { font-size: 14px; color: #ddd; margin-bottom: 14px; text-align: center; }
+.report-card-mizaj { text-align: center; margin-bottom: 16px; }
+.report-card-icon { font-size: 38px; display: block; margin-bottom: 8px; }
+.report-card-mizajname { font-size: 19px; font-weight: bold; color: #fff; display: block; margin-bottom: 6px; }
+.report-card-pct { font-size: 12px; color: #a8d5ba; background: rgba(45,106,79,0.3); padding: 4px 14px; border-radius: 99px; display: inline-block; }
+.report-card-divider { height: 1px; background: #1f3d2d; margin: 14px 0; }
+.report-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.rc-score { text-align: center; padding: 8px; background: rgba(255,255,255,0.03); border-radius: 10px; }
+.rc-score .rc-name { font-size: 11px; color: #8a9a92; margin-bottom: 3px; }
+.rc-score .rc-val { font-size: 16px; font-weight: bold; }
+.report-card-axis { font-size: 12px; color: #9bb8a8; text-align: center; line-height: 1.9; }
+.screenshot-hint { text-align: center; font-size: 12.5px; color: #a8d5ba; margin-top: 14px; background: #0d2b1e; padding: 10px 14px; border-radius: 10px; border: 1px solid #1f3d2d; }
+
 .restart-link { display: block; text-align: center; font-size: 13px; color: #6b8a7a; margin-top: 18px; cursor: pointer; text-decoration: underline; }
 
 .error-msg { background: #2b0a0a; border: 1px solid #7d1a1a; color: #f08080; padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 14px; display: none; }
@@ -209,18 +227,26 @@ canvas#mizajChart { max-width: 260px; max-height: 260px; margin: auto; display: 
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-header"><h2>📤 ارسال گزارش به مشاور</h2></div>
+    <div class="card" id="screenshotCard">
+      <div class="card-header"><h2>📸 کارت گزارش — برای ارسال به مشاور</h2></div>
       <div class="card-body">
-        <div class="contact-grid">
-          <button class="contact-btn contact-rubika" onclick="sendReportRubika()" style="border:none;cursor:pointer;font-family:Tahoma,sans-serif">
-            <span class="c-icon">📲</span>گزارش به روبیکا
-          </button>
-          <button class="contact-btn contact-whatsapp" onclick="sendReportWhatsapp()" style="border:none;cursor:pointer;font-family:Tahoma,sans-serif">
-            <span class="c-icon">💬</span>گزارش به واتساپ
-          </button>
+        <div class="report-card" id="reportCard">
+          <div class="report-card-header">
+            <span class="report-card-logo">🧬 اندام برتر</span>
+            <span class="report-card-sub">گزارش تست جامع مزاج</span>
+          </div>
+          <div class="report-card-name" id="rcName"></div>
+          <div class="report-card-mizaj">
+            <span class="report-card-icon" id="rcIcon"></span>
+            <span class="report-card-mizajname" id="rcMizajName"></span>
+            <span class="report-card-pct" id="rcPct"></span>
+          </div>
+          <div class="report-card-divider"></div>
+          <div class="report-card-grid" id="rcGrid"></div>
+          <div class="report-card-divider"></div>
+          <div class="report-card-axis" id="rcAxis"></div>
         </div>
-        <div class="contact-note" id="sendReportNote">برای واتساپ مستقیم باز می‌شود | برای روبیکا، متن گزارش کپی می‌شود تا داخل چت Paste کنید</div>
+        <div class="screenshot-hint">📸 از این کارت اسکرین‌شات بگیرید و برای مشاور در روبیکا یا واتساپ ارسال کنید</div>
       </div>
     </div>
 
@@ -235,7 +261,7 @@ canvas#mizajChart { max-width: 260px; max-height: 260px; margin: auto; display: 
             <span class="c-icon">💬</span>مشاوره در واتساپ
           </a>
         </div>
-        <div class="contact-note">نتیجه تست را برای مشاور ارسال کنید تا برنامه اختصاصی دریافت کنید</div>
+        <div class="contact-note">عکس کارت گزارش را همانجا برای مشاور ارسال کنید</div>
       </div>
     </div>
 
@@ -516,6 +542,8 @@ function showResult() {
     }
   });
 
+  populateReportCard();
+
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -524,64 +552,28 @@ function buildReportMessage() {
   const r = lastResult;
   const coldText = r.coldPct > 50 ? `گرایش به سردی ${toPersianNum(r.coldPct)}٪` : `گرایش به گرمی ${toPersianNum(100-r.coldPct)}٪`;
   const dryText  = r.dryPct  > 50 ? `گرایش به خشکی ${toPersianNum(r.dryPct)}٪`  : `گرایش به تری ${toPersianNum(100-r.dryPct)}٪`;
-
-  return `📋 گزارش تست جامع مزاج
-
-👤 نام: ${r.name}${r.age ? ' — '+toPersianNum(r.age)+' ساله' : ''}
-
-🧬 مزاج غالب: ${r.mizajName} (${toPersianNum(r.pct[r.domKey])}٪)
-
-📊 توزیع کامل:
-💧 بلغمی: ${toPersianNum(r.pct.balghami)}٪
-🌿 دموی: ${toPersianNum(r.pct.damavi)}٪
-🔥 صفراوی: ${toPersianNum(r.pct.safravi)}٪
-🍂 سوداوی: ${toPersianNum(r.pct.sodavi)}٪
-
-🌡️ محورهای علمی:
-${coldText}
-${dryText}
-
-لطفاً برنامه اختصاصی من را آماده کنید 🙏`;
+  return { coldText, dryText };
 }
 
-function sendReportWhatsapp() {
-  const msg = buildReportMessage();
-  if (!msg) return;
-  const encoded = encodeURIComponent(msg);
-  const link = document.createElement('a');
-  link.href = `https://wa.me/989197096864?text=${encoded}`;
-  link.rel = 'noopener';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
+function populateReportCard() {
+  if (!lastResult) return;
+  const r = lastResult;
+  const { coldText, dryText } = buildReportMessage();
+  const icons = { balghami:'💧', damavi:'🌿', safravi:'🔥', sodavi:'🍂' };
+  const names = { balghami:'بلغمی', damavi:'دموی', safravi:'صفراوی', sodavi:'سوداوی' };
 
-function sendReportRubika() {
-  const msg = buildReportMessage();
-  if (!msg) return;
-  const note = document.getElementById('sendReportNote');
+  document.getElementById('rcName').textContent = r.name + (r.age ? ' — '+toPersianNum(r.age)+' ساله' : '');
+  document.getElementById('rcIcon').textContent = icons[r.domKey] || '🧬';
+  document.getElementById('rcMizajName').textContent = r.mizajName;
+  document.getElementById('rcPct').textContent = `${toPersianNum(r.pct[r.domKey])}٪ غالب`;
 
-  function goToRubika() {
-    const link = document.createElement('a');
-    link.href = 'https://rubika.ir/andam_bartar_1';
-    link.rel = 'noopener';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  let gridHtml = '';
+  ['balghami','damavi','safravi','sodavi'].forEach(k => {
+    gridHtml += `<div class="rc-score"><div class="rc-name">${icons[k]} ${names[k]}</div><div class="rc-val">${toPersianNum(r.pct[k])}٪</div></div>`;
+  });
+  document.getElementById('rcGrid').innerHTML = gridHtml;
 
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(msg).then(() => {
-      if (note) note.textContent = '✅ متن گزارش کپی شد! داخل چت روبیکا Paste کنید — در حال انتقال...';
-      setTimeout(goToRubika, 1400);
-    }).catch(() => {
-      if (note) note.textContent = '⚠️ کپی خودکار ممکن نشد — لطفاً نتیجه را به مشاور توضیح دهید';
-      setTimeout(goToRubika, 1400);
-    });
-  } else {
-    if (note) note.textContent = '⚠️ کپی خودکار در این مرورگر پشتیبانی نمی‌شود — در حال انتقال...';
-    setTimeout(goToRubika, 1400);
-  }
+  document.getElementById('rcAxis').innerHTML = `🌡️ ${coldText} &nbsp;|&nbsp; ${dryText}`;
 }
 </script>
 </body>
